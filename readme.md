@@ -5,7 +5,7 @@
 ## 使用
 修改 app.java 中的目录名和其他配置，
 方法 1：使用 ide 运行 app 类的 main 方法
-方法 2：使用命令行编译，然后运行
+方法 2：直接下载jar包，然后命令行运行
 
 ## 扩展
 程序本身没有定时运行的能力，可以用 java 的定时任务去做，ScheduledThreadPoolExecutor
