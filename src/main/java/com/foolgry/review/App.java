@@ -12,8 +12,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class App {
+
+    public static void main(String[] args) {
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        executorService.scheduleAtFixedRate(App::generateHtml, 0, 3, TimeUnit.HOURS);
+    }
 
     private static final PegDownProcessor pegDownProcessor = new PegDownProcessor();
     private static final String lineSeparator = "<br>";
@@ -21,27 +29,30 @@ public class App {
     public static final String HTML_FILE_DIR = "/Users/wangzhi/Documents/everynote/";
     public static final int PICK_NUMBER = 10;
 
-    public static void main(String[] args) throws IOException {
-        // init file dir
-        File dir = new File(SOURCE_DIR);
+    public static void generateHtml() {
+        try {
+            // init file dir
+            File dir = new File(SOURCE_DIR);
 
-        List<File> fileList = new ArrayList<>(600);
-        // read all md file to fileList
-        readMdFile(fileList, dir);
+            List<File> fileList = new ArrayList<>(600);
+            // read all md file to fileList
+            readMdFile(fileList, dir);
 
-        // picker ten file and merge to one
-        String sb = pickerFileAndGetContent(fileList);
+            // picker ten file and merge to one
+            String sb = pickerFileAndGetContent(fileList);
 
-        // transfer md to html
-        String html = mdToHtml(sb);
+            // transfer md to html
+            String html = mdToHtml(sb);
 
-        // write a new file
-        writeToFile(html);
-
+            // write a new file
+            writeToFile(html);
+        } catch (IOException ioException) {
+            System.out.println("error"+ioException.getMessage());
+        }
     }
 
     private static void writeToFile(String html) throws IOException {
-        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
         Files.write(Paths.get(HTML_FILE_DIR + date + ".html"),
                 html.getBytes(StandardCharsets.UTF_8));
     }
