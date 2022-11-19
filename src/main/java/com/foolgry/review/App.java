@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +46,14 @@ public class App {
 
             // write a new file
             writeToFile(html);
-        } catch (IOException ioException) {
-            System.out.println("error"+ioException.getMessage());
+        } catch (Exception e) {
+            System.out.println("error"+e.getMessage());
         }
     }
 
     private static void writeToFile(String html) throws IOException {
-        String date = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm"));
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"));
+        System.out.println(date);
         Files.write(Paths.get(HTML_FILE_DIR + date + ".html"),
                 html.getBytes(StandardCharsets.UTF_8));
     }
